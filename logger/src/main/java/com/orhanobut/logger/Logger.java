@@ -12,7 +12,6 @@ public final class Logger {
   public static final int VERBOSE = 2;
   public static final int WARN = 5;
 
-  private static final String DEFAULT_TAG = "PRETTYLOGGER";
 
   private static Printer printer = new LoggerPrinter();
 
@@ -20,23 +19,14 @@ public final class Logger {
   private Logger() {
   }
 
-  /**
-   * It is used to get the settings object in order to change settings
-   *
-   * @return the settings object
-   */
-  public static Settings init() {
-    return init(DEFAULT_TAG);
-  }
 
   /**
    * It is used to change the tag
    *
-   * @param tag is the given string which will be used in Logger as TAG
    */
-  public static Settings init(String tag) {
+  public static Settings init() {
     printer = new LoggerPrinter();
-    return printer.init(tag);
+    return printer.init();
   }
 
   public static void resetSettings() {

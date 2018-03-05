@@ -4,7 +4,7 @@ public interface Printer {
 
   Printer t(String tag, int methodCount);
 
-  Settings init(String tag);
+  Settings init();
 
   Settings getSettings();
 

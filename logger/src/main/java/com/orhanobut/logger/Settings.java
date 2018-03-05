@@ -11,6 +11,7 @@ public final class Settings {
    * Determines to how logs will be printed
    */
   private LogLevel logLevel = LogLevel.FULL;
+  private String filter;
 
   public Settings hideThreadInfo() {
     showThreadInfo = false;
@@ -34,6 +35,16 @@ public final class Settings {
     this.methodOffset = offset;
     return this;
   }
+
+  public Settings filter(String name){
+    this.filter = name;
+    return this;
+  }
+
+  public  String  getFilter() {
+    return this.filter;
+  }
+
 
   public Settings logAdapter(LogAdapter logAdapter) {
     this.logAdapter = logAdapter;
