@@ -7,12 +7,26 @@
 Simple, pretty and powerful logger for android
 
 ### Setup
-Download
+
+Step 1. Add the JitPack repository to your build file
+
 ```groovy
-compile 'com.orhanobut:logger:2.1.1'
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
 ```
 
-Initialize
+Step 2. Add the dependency
+```groovy
+dependencies {
+	        implementation 'com.github.LinkZhang:logger:2.1.3'
+	}
+```
+
+Step 3. Initialize
 ```java
 Logger.addLogAdapter(new AndroidLogAdapter());
 ```

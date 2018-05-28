@@ -1,7 +1,5 @@
 package com.orhanobut.logger;
 
-import android.annotation.NonNull;
-
 public class PrettyFormatStrategy implements FormatStrategy {
 
     /**
@@ -91,7 +89,7 @@ public class PrettyFormatStrategy implements FormatStrategy {
      * @param elements 堆栈元素
      * @return 索引位置，-1 - 不可用
      */
-    private int getStackIndex(@NonNull StackTraceElement[] elements) {
+    private int getStackIndex(StackTraceElement[] elements) {
         boolean isChecked = false;
         StackTraceElement element;
         for (int i = 0; i < elements.length; i++) {
