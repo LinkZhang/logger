@@ -21,6 +21,7 @@ import static com.orhanobut.logger.Logger.ASSERT;
 import static com.orhanobut.logger.Logger.DEBUG;
 import static com.orhanobut.logger.Logger.ERROR;
 import static com.orhanobut.logger.Logger.INFO;
+import static com.orhanobut.logger.Logger.JSON;
 import static com.orhanobut.logger.Logger.VERBOSE;
 import static com.orhanobut.logger.Logger.WARN;
 
@@ -83,17 +84,18 @@ class LoggerPrinter implements Printer {
       return;
     }
     try {
+
       json = json.trim();
       if (json.startsWith("{")) {
         JSONObject jsonObject = new JSONObject(json);
         String message = jsonObject.toString(JSON_INDENT);
-        d(message);
+        log(JSON,null,message);
         return;
       }
       if (json.startsWith("[")) {
         JSONArray jsonArray = new JSONArray(json);
         String message = jsonArray.toString(JSON_INDENT);
-        d(message);
+        log(JSON,null,message);
         return;
       }
       e("Invalid Json");
@@ -114,7 +116,7 @@ class LoggerPrinter implements Printer {
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
       transformer.transform(xmlInput, xmlOutput);
-      d(xmlOutput.getWriter().toString().replaceFirst(">", ">\n"));
+      log(Logger.XML,null,xmlOutput.getWriter().toString().replaceFirst(">", ">\n"));
     } catch (TransformerException e) {
       e("Invalid xml");
     }

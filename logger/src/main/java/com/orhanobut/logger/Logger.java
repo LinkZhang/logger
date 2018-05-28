@@ -11,6 +11,8 @@ public final class Logger {
   public static final int WARN = 5;
   public static final int ERROR = 6;
   public static final int ASSERT = 7;
+  public static final int JSON = 8;
+  public static final int XML = 9;
 
   private static Printer printer = new LoggerPrinter();
 

@@ -33,10 +33,9 @@ public class MainActivity extends Activity {
 
     FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
         .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-        .methodCount(0)         // (Optional) How many method line to show. Default 2
-        .methodOffset(3)        // (Optional) Skips some method invokes in stack trace. Default 5
 //        .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
         .tag("My custom tag")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
+            .setPackagedLevel(0)
         .build();
 
     Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
@@ -55,7 +54,6 @@ public class MainActivity extends Activity {
     Logger.clearLogAdapters();
     formatStrategy = PrettyFormatStrategy.newBuilder()
         .showThreadInfo(false)
-        .methodCount(0)
         .build();
 
     Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
@@ -76,7 +74,6 @@ public class MainActivity extends Activity {
     Logger.clearLogAdapters();
     formatStrategy = PrettyFormatStrategy.newBuilder()
         .showThreadInfo(false)
-        .methodCount(0)
         .tag("MyTag")
         .build();
     Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));

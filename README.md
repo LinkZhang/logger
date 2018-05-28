@@ -58,8 +58,7 @@ Logger.xml(XML_CONTENT);
 ```java
 FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
   .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-  .methodCount(0)         // (Optional) How many method line to show. Default 2
-  .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+  .setPackagedLevel(0) // If you want to extend logger, please set package's level(hierarchy), otherwise, can't get invoker's info.
   .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
   .tag("My custom tag")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
   .build();
