@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
         .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
 //        .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
         .tag("My custom tag")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
-            .setPackagedLevel(0)
         .build();
 
     Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));

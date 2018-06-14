@@ -1,5 +1,7 @@
 package com.orhanobut.logger;
 
+import android.text.TextUtils;
+
 public class PrettyFormatStrategy implements FormatStrategy {
 
     /**
@@ -41,13 +43,16 @@ public class PrettyFormatStrategy implements FormatStrategy {
     private final boolean showThreadInfo;
     private final LogStrategy logStrategy;
     private final String tag;
-    private int mPackagedLevel;
+    private String mLogClassName;
 
     private PrettyFormatStrategy(Builder builder) {
-        mPackagedLevel = builder.packagedLevel;
+        mLogClassName = builder.logClassName;
         showThreadInfo = builder.showThreadInfo;
         logStrategy = builder.logStrategy;
         tag = builder.tag;
+        if (TextUtils.isEmpty(mLogClassName)){
+            mLogClassName = Logger.class.getName();
+        }
     }
 
     public static Builder newBuilder() {
@@ -84,60 +89,48 @@ public class PrettyFormatStrategy implements FormatStrategy {
 
 
     /**
-     * 获取调用日志类输出方法的堆栈元素索引.
+     * 获取调用日志类输出方法的堆栈
      *
-     * @param elements 堆栈元素
-     * @return 索引位置，-1 - 不可用
+
+     * @return 堆栈
      */
-    private int getStackIndex(StackTraceElement[] elements) {
-        boolean isChecked = false;
-        StackTraceElement element;
-        for (int i = 0; i < elements.length; i++) {
-            element = elements[i];
-            if (LOG_CLASS_NAME.equals(element.getClassName())
-                    && LOG_PRINT_METHOD_NAME.equals(element.getMethodName())) {
-                isChecked = true;
+    private StackTraceElement  getTargetStackTraceElement() {
+        // find the target invoked method
+        StackTraceElement targetStackTrace = null;
+        boolean shouldTrace = false;
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            boolean isLogMethod = stackTraceElement.getClassName().equals(mLogClassName);
+            if (shouldTrace && !isLogMethod) {
+                targetStackTrace = stackTraceElement;
+                break;
             }
-            if (isChecked) {
-                int index = i + 7 + mPackagedLevel;
-                if (index < elements.length) {
-                    return index;
-                }
-            }
+            shouldTrace = isLogMethod;
         }
-        return -1;
+        return targetStackTrace;
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
     private void logHeaderContent(int logType, String tag) {
-        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         if (showThreadInfo) {
             logChunk(logType, tag, HORIZONTAL_LINE + " Thread: " + Thread.currentThread().getName());
             logDivider(logType, tag);
         }
         String level = "";
 
-        int index = getStackIndex(trace);
-        //corresponding method count with the current stack may exceeds the stack trace. Trims the count
-        if (index == -1) {
-            throw new IllegalStateException("set -keep class com.orhanobut.logger.** { *; } in your " +
-                    "proguard config file" +
-                    " or reduce packageLevel");
-        }
-
-
+        StackTraceElement element = getTargetStackTraceElement();
         StringBuilder builder = new StringBuilder();
         builder.append(HORIZONTAL_LINE)
                 .append(' ')
                 .append(level)
-                .append(getSimpleClassName(trace[index].getClassName()))
+                .append(getSimpleClassName(element.getClassName()))
                 .append(".")
-                .append(trace[index].getMethodName())
+                .append(element.getMethodName())
                 .append(" ")
                 .append(" (")
-                .append(trace[index].getFileName())
+                .append(element.getFileName())
                 .append(":")
-                .append(trace[index].getLineNumber())
+                .append(element.getLineNumber())
                 .append(")");
         logChunk(logType, tag, builder.toString());
 
@@ -179,13 +172,13 @@ public class PrettyFormatStrategy implements FormatStrategy {
         boolean showThreadInfo = true;
         LogStrategy logStrategy;
         String tag = "PRETTY_LOGGER";
-        int packagedLevel = 0;
+        String logClassName;
 
         private Builder() {
         }
 
-        public Builder setPackagedLevel(int level) {
-            packagedLevel = level;
+        public Builder setLogClassName(String level) {
+            logClassName = level;
             return this;
         }
 
